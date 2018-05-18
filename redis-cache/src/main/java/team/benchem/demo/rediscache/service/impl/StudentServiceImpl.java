@@ -1,6 +1,9 @@
 package team.benchem.demo.rediscache.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import team.benchem.demo.rediscache.entity.Student;
 import team.benchem.demo.rediscache.repository.StudentRepository;
@@ -23,6 +26,7 @@ public class StudentServiceImpl implements StudentService {
         return studentRepository.findAllByKeyword(queryWord);
     }
 
+    @Cacheable(value = "StudentService:Student", key = "#userName")
     @Override
     public Student findStudent(String userName) {
         Optional<Student> studentOptional = studentRepository.findByUserName(userName);
@@ -32,6 +36,7 @@ public class StudentServiceImpl implements StudentService {
         return studentOptional.get();
     }
 
+    @CachePut(value = "StudentService:Student", key = "#student.userName")
     @Override
     public Student appendStudent(Student student) {
         Student dbStudent = findStudent(student.getUserName());
@@ -41,6 +46,7 @@ public class StudentServiceImpl implements StudentService {
         return studentRepository.save(student);
     }
 
+    @CachePut(value = "StudentService:Student", key = "#student.userName")
     @Override
     public Student updateStudent(Student student) {
         Student dbStudent = findStudent(student.getUserName());
@@ -53,6 +59,7 @@ public class StudentServiceImpl implements StudentService {
         return studentRepository.save(student);
     }
 
+    @CacheEvict(value = "StudentService:Student", key = "#userName")
     @Override
     public void deleteStudent(String userName) {
         Student dbStudent = findStudent(userName);

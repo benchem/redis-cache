@@ -42,9 +42,10 @@ public class StudentServiceUnitTest {
         student.setNickName("BBB");
         studentService.updateStudent(student);
 
-        Student dbStudent2 = studentService.findStudent("admin");
-        Assert.assertEquals(dbStudent2.getNickName(), "BBB");
-
+        for(int time=0; time<5; time++) {
+            Student dbStudent2 = studentService.findStudent("admin");
+            Assert.assertEquals(dbStudent2.getNickName(), "BBB");
+        }
     }
 
     @Test
@@ -60,9 +61,10 @@ public class StudentServiceUnitTest {
 
         studentService.deleteStudent("user1");
 
-        Student dbStudent2 = studentService.findStudent("user1");
-        Assert.assertNull(dbStudent2);
-
+        for(int time=0; time<5; time++) {
+            Student dbStudent2 = studentService.findStudent("user1");
+            Assert.assertNull(dbStudent2);
+        }
     }
 
 }
